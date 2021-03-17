@@ -18,9 +18,8 @@
     "babel-loader": "^8.2.2",
     "date-fns": "^2.16.1",
     "excerpts": "^0.0.3",
-    "ioredis": "^4.19.4",
     "marked": "^1.2.7",
-    "micro-cookie-session": "^2.0.0-beta.1",
+    "mysql2": "^2.2.5",
     "next": "^10.0.4",
     "oauth": "^0.9.15",
     "react": "0.0.0-experimental-3310209d0",
@@ -32,10 +31,14 @@
     "webpack": "4.44.1"
   },
   "devDependencies": {
-    "prettier": "2.2.1"
+    "@types/node": "^14.14.35",
+    "@types/react": "^17.0.3",
+    "prettier": "2.2.1",
+    "typescript": "^4.2.3"
   },
   "prettier": {
-    "semi": false,
+    "semi": true,
+    "tabWidth": 4,
     "singleQuote": true,
     "jsxBracketSameLine": false,
     "arrowParens": "avoid"

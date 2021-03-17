@@ -1,50 +1,37 @@
-import redis from '../../../libs/redis'
-import sendRes from '../../../libs/send-res-with-module-map'
-import session from '../../../libs/session'
+import sendRes from '../../../libs/send-res-with-module-map';
+import { pool } from '../../../utils/db';
 
 export default async (req, res) => {
-  session(req, res)
-  const id = +req.query.id
-  const login = req.session.login
+    if (req.method === 'GET') {
+        console.time('get item from db');
+        const [rows] = await pool.execute('select * from notes where id = ?', [
+            req.query.id,
+        ]);
+        console.timeEnd('get item from db');
 
-  console.time('get item from redis')
-  const note = JSON.parse((await redis.hget('rsc:notes_2', id)) || 'null')
-  console.timeEnd('get item from redis')
-
-  if (req.method === 'GET') {
-    return res.send(JSON.stringify(note))
-  }
-
-  if (req.method === 'DELETE') {
-    if (!login || login !== note.created_by) {
-      return res.status(403).send('Unauthorized')
+        return res.send(rows[0]);
     }
 
-    console.time('delete item from redis')
-    await redis.hdel('rsc:notes_2', id)
-    console.timeEnd('delete item from redis')
+    if (req.method === 'DELETE') {
+        console.time('delete item from db');
+        await pool.execute('delete from notes where id = ?', [req.query.id]);
+        console.timeEnd('delete item from db');
 
-    return sendRes(req, res, null)
-  }
-
-  if (req.method === 'PUT') {
-    if (!login || login !== note.created_by) {
-      return res.status(403).send('Unauthorized')
+        return sendRes(req, res, null);
     }
 
-    console.time('update item from redis')
-    const updated = {
-      id,
-      title: (req.body.title || '').slice(0, 255),
-      updated_at: Date.now(),
-      body: (req.body.body || '').slice(0, 2048),
-      created_by: login,
+    if (req.method === 'PUT') {
+        console.time('update item from db');
+        const now = new Date();
+        const updatedId = Number(req.query.id);
+        await pool.execute(
+            'update notes set title = ?, body = ?, updated_at = ? where id = ?',
+            [req.body.title, req.body.body, now, updatedId]
+        );
+        console.timeEnd('update item from db');
+
+        return sendRes(req, res, null);
     }
-    await redis.hset('rsc:notes_2', id, JSON.stringify(updated))
-    console.timeEnd('update item from redis')
 
-    return sendRes(req, res, null)
-  }
-
-  return res.send('Method not allowed.')
-}
+    return res.send('Method not allowed.');
+};

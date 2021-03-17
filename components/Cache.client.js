@@ -17,6 +17,9 @@ export function useServerResponse(location) {
   if (response) {
     return response
   }
+
+  const url = endpoint + '/api?location=' + encodeURIComponent(key);
+  console.log(url)
   response = createFromFetch(
     fetch(endpoint + '/api?location=' + encodeURIComponent(key))
   )
