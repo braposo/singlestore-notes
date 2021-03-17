@@ -5,43 +5,45 @@ export default function MyApp({ Component, pageProps }) {
     return (
         <>
             <Head>
-                <title>React Server Components (Experimental Demo)</title>
+                <title>
+                    React Server Components with SingleStore (Experimental Demo)
+                </title>
                 <meta httpEquiv="Content-Language" content="en" />
                 <meta
                     name="description"
-                    content="Experimental demo of React Server Components with Next.js. Hosted on Vercel."
+                    content="Experimental demo of React Server Components with Next.js and SingleStore. Hosted on Vercel."
                 />
                 <meta
                     name="og:description"
-                    content="Experimental demo of React Server Components with Next.js. Hosted on Vercel."
+                    content="Experimental demo of React Server Components with Next.js and SingleStore. Hosted on Vercel."
                 />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta
                     name="twitter:image"
-                    content="https://singlestore-zero.vercel.app/og.png"
+                    content="https://singlestore-notes.vercel.app/og.png"
                 />
                 <meta
                     name="twitter:site:domain"
-                    content="https://singlestore-zero.vercel.app"
+                    content="https://singlestore-notes.vercel.app"
                 />
                 <meta
                     name="twitter:url"
-                    content="https://singlestore-zero.vercel.app/og.png"
+                    content="https://singlestore-notes.vercel.app/og.png"
                 />
                 <meta
                     name="og:title"
-                    content="React Server Components (Experimental Demo)"
+                    content="React Server Components with SingleStore (Experimental Demo)"
                 />
                 <meta
                     name="og:image"
-                    content="https://singlestore-zero.vercel.app/og.png"
+                    content="https://singlestore-notes.vercel.app/og.png"
                 />
                 <link
                     rel="preload"
                     as="fetch"
                     crossOrigin="anonymous"
                     href={
-                        'https://singlestore-zero.vercel.app/api?location=%7B%22selectedId%22%3Anull%2C%22isEditing%22%3Afalse%2C%22searchText%22%3A%22%22%7D'
+                        'https://singlestore-notes.vercel.app/api?location=%7B%22selectedId%22%3Anull%2C%22isEditing%22%3Afalse%2C%22searchText%22%3A%22%22%7D'
                     }
                 />
             </Head>
