@@ -1,28 +1,26 @@
-import { createFromFetch } from 'react-server-dom-webpack'
+import { createFromFetch } from 'react-server-dom-webpack';
 
-const endpoint = process.env.NEXT_PUBLIC_ENDPOINT
+const endpoint = process.env.NEXT_PUBLIC_ENDPOINT;
 
-const cache = new Map()
+const cache = new Map();
 
 export function useRefresh() {
-  return function refresh(key, seededResponse) {
-    cache.clear()
-    cache.set(key, seededResponse)
-  }
+    return function refresh(key, seededResponse) {
+        cache.clear();
+        cache.set(key, seededResponse);
+    };
 }
 
 export function useServerResponse(location) {
-  const key = JSON.stringify(location)
-  let response = cache.get(key)
-  if (response) {
-    return response
-  }
+    const key = JSON.stringify(location);
+    let response = cache.get(key);
+    if (response) {
+        return response;
+    }
 
-  const url = endpoint + '/api?location=' + encodeURIComponent(key);
-  console.log(url)
-  response = createFromFetch(
-    fetch(endpoint + '/api?location=' + encodeURIComponent(key))
-  )
-  cache.set(key, response)
-  return response
+    response = createFromFetch(
+        fetch(endpoint + '/api?location=' + encodeURIComponent(key))
+    );
+    cache.set(key, response);
+    return response;
 }
