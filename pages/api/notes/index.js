@@ -5,21 +5,22 @@ export default async (req, res) => {
     if (req.method === 'GET') {
         console.time('get all items from db');
         const search = req.query && req.query.q;
-        let results = [];
 
-        if (search) {
-            results = await pool.execute(
-                `select * from notes where title like ? order by id desc`,
-                ['%' + search + '%']
-            );
-        } else {
-            results = await pool.execute(
-                'select * from notes order by id desc'
-            );
-        }
+        // if (search) {
+        //     results = await pool.execute(
+        //         `select * from notes where title like ? order by id desc`,
+        //         ['%' + search + '%']
+        //     );
+        // } else {
+        const results = await fetch(
+            'http://0.0.0.0:3001/api/data/absolute_coral_skink'
+        );
+
+        // }
+        const resJson = await results.json();
 
         console.timeEnd('get all items from db');
-        return res.json(results[0]);
+        return res.json(resJson);
     }
 
     if (req.method === 'POST') {
