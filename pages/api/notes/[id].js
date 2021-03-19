@@ -1,18 +1,17 @@
 import sendRes from '../../../libs/send-res-with-module-map';
-import { pool } from '../../../utils/db';
+
+const s2zEndpoint = process.env.SINGLESTORE_ZERO_ENDPOINT;
+const s2zSheet = process.env.SINGLESTORE_ZERO_SHEET;
 
 export default async (req, res) => {
     if (req.method === 'GET') {
         console.time('get item from db');
-        // const [rows] = await pool.execute('select * from notes where id = ?', [
-        //     req.query.id,
-        // ]);
+
         const results = await fetch(
-            `http://0.0.0.0:3001/api/data/absolute_coral_skink/${req.query.id}`
+            `${s2zEndpoint}/${s2zSheet}/${req.query.id}`
         );
 
         const resJson = await results.json();
-        console.log(resJson);
         console.timeEnd('get item from db');
 
         return res.json(resJson);
@@ -20,7 +19,9 @@ export default async (req, res) => {
 
     if (req.method === 'DELETE') {
         console.time('delete item from db');
-        await pool.execute('delete from notes where id = ?', [req.query.id]);
+        await fetch(`${s2zEndpoint}/${s2zSheet}/${req.query.id}`, {
+            method: 'DELETE',
+        });
         console.timeEnd('delete item from db');
 
         return sendRes(req, res, null);
@@ -29,22 +30,13 @@ export default async (req, res) => {
     if (req.method === 'PUT') {
         console.time('update item from db');
         const now = new Date();
-        // const updatedId = Number(req.query.id);
-        // await pool.execute(
-        //     'update notes set title = ?, body = ?, updated_at = ? where id = ?',
-        //     [req.body.title, req.body.body, now, updatedId]
-        // );
-
-        await fetch(
-            `http://0.0.0.0:3001/api/data/absolute_coral_skink/${req.query.id}`,
-            {
-                body: JSON.stringify({
-                    ...req.body,
-                    updatedAt: now,
-                }),
-                method: 'PUT',
-            }
-        );
+        await fetch(`${s2zEndpoint}/${s2zSheet}/${req.query.id}`, {
+            body: JSON.stringify({
+                ...req.body,
+                updated_at: now,
+            }),
+            method: 'PUT',
+        });
         console.timeEnd('update item from db');
 
         return sendRes(req, res, null);

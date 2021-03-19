@@ -14,8 +14,6 @@ export default function Note({ selectedId, isEditing }) {
             ? fetch(`${endpoint}/api/notes/${selectedId}`).json()
             : null;
 
-    console.log(note, selectedId);
-
     if (note === null) {
         if (isEditing) {
             return (
